@@ -9,6 +9,8 @@ use Illuminate\View\View;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Requests\ArsipRequest;
+use Illuminate\Support\Facades\Log;
+use App\Http\Resources\ArsipResource;
 use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -86,21 +88,85 @@ class ArsipController extends Controller
         return Storage::disk('public')->download($fileName);
     }
 
-    public function showFile (Arsip $arsip)
+    public function showFile (Request $request)
     {
-        $fileName = $arsip->file;
-        // if (Storage::disk('public')->missing($fileName)) {
-        //     abort(404, 'File Not Found');
-        // }
+        try {
+            $fileID = $request->query('fileId');
 
-        $fille = asset('storage/'.$fileName);
+            // Validasi awal untuk fileId
+            if (!$fileID) {
+                return response()->json([
+                    'status'    => 400,
+                    'message'   => 'Bad Request: fileId is required'
+                ], 400);
+            }
+
+            // Temukan file berdasarkan fileId
+            $arsip = Arsip::find($fileID);
+
+            // Cek apakah arsip ditemukan
+            if (!$arsip) {
+                return response()->json([
+                    'status'    => 404,
+                    'message'   => 'File Not Found'
+                ], 404);
+            }
+
+            // Asumsikan `file_name` adalah kolom yang menyimpan nama file
+            $fileName = $arsip->file;
+
+            // Cek apakah file ada di storage
+            if (Storage::disk('public')->missing($fileName)) {
+                return response()->json([
+                    'status'    => 404,
+                    'message'   => 'File Not Found'
+                ], 404);
+            }
+
+            // Buat URL file
+            // $filePDF = asset('storage/' . $fileName);
+            $filePDF = storage_path('app/public/' . $fileName);
+
+            return response($filePDF, 200)
+                ->header('Content-Type', 'application/pdf')
+                ->header('Content-Disposition', 'inline; filename="' . $filePDF . '"');
+
+        } catch (Exception $err) {
+            Log::info($err->getMessageBag());
+        }
+
+        // $fille = asset('storage/'.$fileName);
+
         // return response($fille, 200)
-        //     ->header('Content-Type', 'application/pdf');
+        //     ->header('Content-Type', 'application/pdf')
+        //     ->header('Content-Disposition', 'inline; filename="'.$file.'"');
 
         // return response()->stream($fille, 200, [
         //     'Content-Type' => 'application/pdf',
         //     'Content-Disposition' => 'inline; filename="yourfile.pdf"',
         // ]);
-        return view('arsip.showFile', compact('arsip'));
+        // return view('arsip.showFile', compact('arsip'));
+    }
+
+    public function search (Request $request)
+    {
+        $search = $request->query('no_surat', '');
+
+        // Jika parameter pencarian kosong, kembalikan respons "not found"
+        if (empty($search)) {
+            return response()->json([
+                'status'  => 404,
+                'message' => 'Not found'
+            ]);
+        }
+
+        $arsip = Arsip::withTrashed()->searchNoArsip($search)->get();
+
+        $result = ArsipResource::collection($arsip);
+
+        return response()->json([
+            'status' => 200,
+            'data'   => $result,
+        ]);
     }
 }

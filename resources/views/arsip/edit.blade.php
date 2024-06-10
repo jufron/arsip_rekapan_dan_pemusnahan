@@ -1,6 +1,8 @@
 <x-layouts.dashboard title="Dashboard">
     <x-slot:head>
         <link href="https://unpkg.com/filepond@^4/dist/filepond.css" rel="stylesheet" />
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.3.136/pdf_viewer.min.css" integrity="sha512-Cq5XgEsaLgxVXOIAn0dHWEksHM6X9POVKcaD1dGc37C6O+vWl5UIxtgC05JW9WnZA7jll4ouJ3zXDJ6/7RDX7g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     </x-slot:head>
     <x-slot:content>
         <!-- Page Heading -->
@@ -72,6 +74,7 @@
                         <input type="file" id="" name="file" @diskExists($arsip->file) data-file="{{ asset("storage/". $arsip->file) }}" @enddiskExists />
                         <input type="hidden" name="file_path" value="">
                     </div>
+                    <a href="{{ route('arsip.show.file') }}" target="_blank">test route</a>
 
                     <button class="btn btn-success mt-5 mb-4 btn-lg">
                         Perbaharui
@@ -85,6 +88,7 @@
         <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
         <script src="https://unpkg.com/filepond-plugin-pdf-preview/dist/filepond-plugin-pdf-preview.min.js"></script>
         <script src="https://unpkg.com/filepond@^4/dist/filepond.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.3.136/pdf.min.mjs"></script>
 
         <script>
             // Get a reference to the file input element
@@ -152,11 +156,28 @@
                     // },
                 }
             });
+
             if (inputElement.getAttribute('data-file')) {
                 const exsistingFile = inputElement.getAttribute('data-file');
                 // const file = new File([exsistingFile], 'existing_file.pdf', { type: 'application/pdf' });
                 // pond.addFile(file);
             }
+
+            const url = `{{ route('arsip.show.file') }}`;
+            const params = `{{ $arsip->id }}`;
+            const query = `${url}?fileId=${params}`;
+
+            console.log(query);
+
+            fetch(query)
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data);
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+
         </script>
     </x-slot:script>
 </x-layouts.dashboard>

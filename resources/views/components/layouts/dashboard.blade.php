@@ -88,6 +88,27 @@
             </div>
         </div>
     </div>
+
+    {{-- ? modal search --}}
+    <div class="modal fade" id="mocalSearch" tabindex="-1" aria-labelledby="modalSearchLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalSearchLabel">Hasil Pencarian</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modal-body-search">
+
+            </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     @include('sweetalert::alert')
 
     @include('sweetalert::alert', ['cdn' => "https://cdn.jsdelivr.net/npm/sweetalert2@9"])
@@ -106,6 +127,129 @@
 
     {{-- ? Custom scripts for all pages --}}
     <script src="{{ asset('js/sb-admin-2.min.js') }}"></script>
+
+    <script>
+        const urlSearch = `{{ route('arsip.search.data') }}`;
+        const buttonSearchDekstop = document.getElementById('button-search-dekstop');
+        const buttonSearchMobile = document.getElementById('button-search-mobile');
+        const modalBodySearch = document.getElementById('modal-body-search');
+
+        const inputSearchDekstop = document.getElementById('search-input-dekstop');
+        const inputSearchMobile = document.getElementById('search-input-mobile');
+
+        function getDataInput (e) {
+            let search = '';
+
+            if (inputSearchDekstop.value !== '') {
+                search = inputSearchDekstop.value;
+            }
+
+            if (inputSearchMobile.value !== '') {
+                search = inputSearchMobile.value;
+            }
+
+            if (search === '') {
+                modalBodySearch.innerHTML = `<p class="text-center"> Data Tidak Ada</p>`;
+            } else {
+                let url = `${urlSearch}?no_surat=${search}`;
+                loading(true);
+
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        setTimeout(() => {
+                            renderHTML(data);
+                        }, 2000);
+                    })
+                    .catch(err => console.log(err));
+            }
+
+        }
+
+        function renderHTML(response) {
+            const { data, status } = response;
+            let element = '';
+            loading(false);
+
+            if (data.length === 0) {
+                element += `<p class="text-center"> Data Tidak Ada</p>`;
+            } else {
+                element += `
+                <div class="table-responsive mt-4">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>No Surat</th>
+                                <th>Tanggal Surat</th>
+                                <th>Perihal</th>
+                                <th>Disposisi</th>
+                                <th>Tahun</th>
+                                <th>status</th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>No</th>
+                                <th>No Surat</th>
+                                <th>Tanggal Surat</th>
+                                <th>Perihal</th>
+                                <th>Disposisi</th>
+                                <th>Tahun</th>
+                                <th>status</th>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            ${loopData(data)}
+                        </tbody>
+                    </table>
+                </div>
+                `;
+            }
+
+            modalBodySearch.innerHTML = element;
+        }
+
+        function loopData (data) {
+            let element = ``;
+            let nomor = 1;
+
+            data.forEach(d => {
+                element += `<tr>
+                                <td>${nomor++}</td>
+                                <td>${d.no_surat}</td>
+                                <td>${d.tanggal_surat}</td>
+                                <td>${d.perihal}</td>
+                                <td>${d.nama_disposisi}</td>
+                                <td>${d.tahun}</td>
+                                <td>
+                                    ${d.deleted_at === `Belum Dihapus`
+                                        ? `<span class="p-2 badge badge-success">${d.deleted_at}</span>`
+                                        : `<span class="p-2 badge badge-danger">${d.deleted_at}</span>`
+                                    }
+                                </td>
+                            </tr>
+                        `;
+            });
+            return element;
+        }
+
+        function loading(state) {
+            let element = `
+            <div class="text-center">
+                <div class="spinner-border" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+            `;
+            if (state) {
+                modalBodySearch.innerHTML = element;
+            }
+        }
+
+        buttonSearchDekstop.addEventListener('click', getDataInput);
+        buttonSearchMobile.addEventListener('click', getDataInput)
+    </script>
 
     {{-- ?  script --}}
     {{ $script ?? null }}

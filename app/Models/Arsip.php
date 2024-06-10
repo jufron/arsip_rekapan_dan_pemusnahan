@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -23,6 +24,11 @@ class Arsip extends Model
         'file',
         'tahun'
     ];
+
+    public function scopeSearchNoArsip (Builder $query, string $search): void
+    {
+        $query->where('no_surat', intval($search));
+    }
 
      /**
      * Get the disposisi that owns the Arsip

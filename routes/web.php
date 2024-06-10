@@ -31,7 +31,8 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
 
     Route::prefix('arsip')->controller(ArsipController::class)->group( function () {
         Route::get('download/{arsip}', 'download')->name('arsip.donwload');
-        Route::get('show-file/{arsip}', 'showFile')->name('arsip.show-file');
+        Route::get('file/show', 'showFile')->name('arsip.show.file');
+        Route::get('search/nomor', 'search')->name('arsip.search.data');
     });
 
     // * filepond
