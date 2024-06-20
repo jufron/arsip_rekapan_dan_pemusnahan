@@ -18,7 +18,7 @@ class ArsipResource extends JsonResource
             'id' => $this->id,
             'no_arsip' => $this->no_arsip,
             'no_surat' => $this->no_surat,
-            'tanggal_surat' => $this->tanggal_surat,
+            'tanggal_surat' => $this->format_tanggal_surat,
             'perihal' => $this->perihal,
             'nama_disposisi' => $this->disposisi ? $this->disposisi->nama_disposisi : null,
             'tahun' => $this->tahun,

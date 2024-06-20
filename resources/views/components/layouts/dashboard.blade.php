@@ -188,17 +188,6 @@
                                 <th>status</th>
                             </tr>
                         </thead>
-                        <tfoot>
-                            <tr>
-                                <th>No</th>
-                                <th>No Surat</th>
-                                <th>Tanggal Surat</th>
-                                <th>Perihal</th>
-                                <th>Disposisi</th>
-                                <th>Tahun</th>
-                                <th>status</th>
-                            </tr>
-                        </tfoot>
                         <tbody>
                             ${loopData(data)}
                         </tbody>
@@ -213,7 +202,7 @@
         function loopData (data) {
             let element = ``;
             let nomor = 1;
-
+            console.log(data);
             data.forEach(d => {
                 element += `<tr>
                                 <td>${nomor++}</td>

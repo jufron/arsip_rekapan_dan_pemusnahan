@@ -30,17 +30,6 @@
                                 <th>aksi</th>
                             </tr>
                         </thead>
-                        <tfoot>
-                            <tr>
-                                <th>No</th>
-                                <th>No Surat</th>
-                                <th>Tanggal Surat</th>
-                                <th>Perihal</th>
-                                <th>Disposisi</th>
-                                <th>File</th>
-                                <th>aksi</th>
-                            </tr>
-                        </tfoot>
                         <tbody>
                             @foreach ($arsip as $a)
                             <tr>
