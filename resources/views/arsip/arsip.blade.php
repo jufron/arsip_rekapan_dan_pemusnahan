@@ -46,7 +46,7 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $a->no_surat }}</td>
-                                <td>{{ $a->tanggal_surat }}</td>
+                                <td>{{ $a->format_tanggal_surat }}</td>
                                 <td>{{ $a->perihal }}</td>
                                 <td>{{ $a->disposisi->nama_disposisi }}</td>
                                 <td>
@@ -94,7 +94,9 @@
 
         <script>
             const allButtonDelete = document.querySelectorAll('#arsip-destroy');
-            allButtonDelete.forEach(buttonDelete => {
+            const formSubmit = document.querySelectorAll('#arsip-destroy-form');
+
+            allButtonDelete.forEach((buttonDelete, index) => {
                 buttonDelete.addEventListener('click', function(event) {
                     event.preventDefault();
                     Swal.fire({
@@ -108,7 +110,7 @@
                         cancelButtonText: 'Batal'
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            document.getElementById('arsip-destroy-form').submit();
+                            formSubmit[index].submit();
                         }
                     })
                 });

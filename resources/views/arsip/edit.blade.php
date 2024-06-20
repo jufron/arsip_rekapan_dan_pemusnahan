@@ -71,11 +71,9 @@
                         </div>
                     </div>
                     <div class="col-md-6 my-4">
-                        <input type="file" id="" name="file" @diskExists($arsip->file) data-file="{{ asset("storage/". $arsip->file) }}" @enddiskExists />
+                        <input type="file" id="" name="file" />
                         <input type="hidden" name="file_path" value="">
                     </div>
-                    <a href="{{ route('arsip.show.file') }}" target="_blank">test route</a>
-
                     <button class="btn btn-success mt-5 mb-4 btn-lg">
                         Perbaharui
                     </button>
@@ -88,7 +86,6 @@
         <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
         <script src="https://unpkg.com/filepond-plugin-pdf-preview/dist/filepond-plugin-pdf-preview.min.js"></script>
         <script src="https://unpkg.com/filepond@^4/dist/filepond.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.3.136/pdf.min.mjs"></script>
 
         <script>
             // Get a reference to the file input element
@@ -162,22 +159,6 @@
                 // const file = new File([exsistingFile], 'existing_file.pdf', { type: 'application/pdf' });
                 // pond.addFile(file);
             }
-
-            const url = `{{ route('arsip.show.file') }}`;
-            const params = `{{ $arsip->id }}`;
-            const query = `${url}?fileId=${params}`;
-
-            console.log(query);
-
-            fetch(query)
-                .then(res => res.json())
-                .then(data => {
-                    console.log(data);
-                })
-                .catch(err => {
-                    console.log(err);
-                });
-
         </script>
     </x-slot:script>
 </x-layouts.dashboard>

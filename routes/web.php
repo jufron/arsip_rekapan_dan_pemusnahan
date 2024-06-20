@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ArsipController;
+use App\Http\Controllers\DisposisiController;
 use App\Http\Controllers\PemusnahanController;
 use App\Http\Controllers\FilePondUploadController;
 
@@ -22,6 +23,14 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
         Route::get('chart-bar-year', 'getDataChartBar1')->name('chart.bar1.get');
         // * query data
         Route::get('arsip/query', 'getDataWhere')->name('arsip.get.tahun');
+    });
+
+    // * disposisi
+    Route::controller(DisposisiController::class)->group( function () {
+        Route::get('disposisi', 'index')->name('disposisi.index');
+        Route::get('disposisi/create', 'create')->name('disposisi.create');
+        Route::post('disposisi', 'store')->name('disposisi.store');
+        Route::delete('disposisi/{disposisi}', 'destroy')->name('disposisi.destroy');
     });
 
     // * arsip

@@ -78,9 +78,12 @@
 
         <script>
             const allButtonDelete = document.querySelectorAll('#arsip-destroy');
-            const allButtonRestore = document.querySelectorAll('#prmusnahan-restore');
+            const formDelete = document.querySelectorAll('#arsip-destroy-form');
 
-            allButtonDelete.forEach(buttonDelete => {
+            const allButtonRestore = document.querySelectorAll('#prmusnahan-restore');
+            const formRestore = document.querySelectorAll('#pemusnahan-restore-form');
+
+            allButtonDelete.forEach((buttonDelete, index) => {
                 buttonDelete.addEventListener('click', function(event) {
                     event.preventDefault();
                     Swal.fire({
@@ -94,13 +97,13 @@
                         cancelButtonText: 'Batal'
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            document.getElementById('arsip-destroy-form').submit();
+                            formDelete[index].submit();
                         }
                     });
                 });
             });
 
-            allButtonRestore.forEach(buttonRestore => {
+            allButtonRestore.forEach((buttonRestore, index) => {
                 buttonRestore.addEventListener('click', function (even) {
                     even.preventDefault();
                     Swal.fire({
@@ -114,7 +117,7 @@
                         cancelButtonText: 'Batal'
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            document.getElementById('pemusnahan-restore-form').submit();
+                            formRestore[index].submit();
                         }
                     });
                 });

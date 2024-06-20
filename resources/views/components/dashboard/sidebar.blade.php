@@ -21,6 +21,12 @@
     <hr class="sidebar-divider">
 
     <!-- Nav Item - Tables -->
+    <li class="nav-item @if (request()->routeIs('disposisi.index')) active @endif">
+        <a class="nav-link" href="{{ route('disposisi.index') }}">
+            <i class="fas fa-fw fa-table"></i>
+            <span>Disposisi</span></a>
+    </li>
+
     <li class="nav-item @if (request()->routeIs('arsip.index')) active @endif">
         <a class="nav-link" href="{{ route('arsip.index') }}">
             <i class="fas fa-fw fa-table"></i>
