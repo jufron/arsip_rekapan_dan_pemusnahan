@@ -22,7 +22,7 @@ class ArsipResource extends JsonResource
             'perihal' => $this->perihal,
             'nama_disposisi' => $this->disposisi ? $this->disposisi->nama_disposisi : null,
             'tahun' => $this->tahun,
-            'deleted_at' => $this->deleted_at ? 'Dihapus' : 'Belum Dihapus',
+            'deleted_at' => $this->deleted_at ? 'Dimusnakan' : 'Arsip',
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

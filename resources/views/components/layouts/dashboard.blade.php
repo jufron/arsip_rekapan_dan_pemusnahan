@@ -204,6 +204,7 @@
             let nomor = 1;
             console.log(data);
             data.forEach(d => {
+                console.log(d.deleted_at);
                 element += `<tr>
                                 <td>${nomor++}</td>
                                 <td>${d.no_surat}</td>
@@ -212,7 +213,7 @@
                                 <td>${d.nama_disposisi}</td>
                                 <td>${d.tahun}</td>
                                 <td>
-                                    ${d.deleted_at === `Belum Dihapus`
+                                    ${d.deleted_at == `Arsip`
                                         ? `<span class="p-2 badge badge-success">${d.deleted_at}</span>`
                                         : `<span class="p-2 badge badge-danger">${d.deleted_at}</span>`
                                     }
