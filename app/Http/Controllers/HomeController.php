@@ -27,13 +27,19 @@ class HomeController extends Controller
     public function index()
     {
         $latest_mounth = Carbon::now()->subMonth();
-        $dateNow = Carbon::now();
-        $mounth = $dateNow->format('F');
+        $bulanSekarang = Carbon::now()->month;
+        $tahunSekarang = Carbon::now()->year;
+
 
         $total_rekapan_pemusnahan = Arsip::withTrashed()->get()->count();
         $arsip_pemusnahan = Arsip::onlyTrashed()->get()->count();
         $arsip_perekapan = Arsip::query()->latest()->get()->count();
-        $one_mount_latest = Arsip::query()->whereBetween('created_at', [$latest_mounth, $dateNow])->get()->count();
+
+        $one_mount_latest = Arsip::query()->whereMonth('created_at', $bulanSekarang)
+                                          ->whereYear('created_at', $tahunSekarang)
+                                          ->count();
+
+        $mounth = Carbon::now()->format('F') . " " . $tahunSekarang;
 
         return view('home', compact(
             'total_rekapan_pemusnahan',
@@ -61,9 +67,77 @@ class HomeController extends Controller
             });
             $whereData = $request->query('disposisi');
         }
+
+        if ($request->query('rekapan_&_pemusnahan')) {
+            $data = $arsip->withTrashed();
+            $whereData = "rekapan pemusnahan : {$data->count()}";
+        }
+
+        if ($request->query('arsip_pemusnahan')) {
+            $data = $arsip->onlyTrashed();
+            $whereData = "arsip pemusnahan : {$data->count()}";
+        }
+
+        if ($request->query('arsip_date_now')) {
+            $bulanSekarang = Carbon::now()->month;
+            $tahunSekarang = Carbon::now()->year;
+
+            $data = $arsip->whereMonth('created_at', $bulanSekarang)
+                          ->whereYear('created_at', $tahunSekarang)
+                          ->get();
+
+            $whereData = "Arsip Masuk Untuk Bulan {$bulanSekarang} {$tahunSekarang} : {$data->count()}";
+        }
+
+        // todo arsip not delete
+        if ($request->query('arsip')) {
+            $data = $arsip;
+            $whereData = "Total Arsip : {$data->count()}";
+        }
+
         return view('arsip.arsipWhere', [
             'arsip' => $arsip->get(),
             'where' => $whereData
+        ]);
+    }
+
+    public function arsipWhere ($where)
+    {
+        // * belongsto
+        $arsip = Arsip::query()->with('disposisi');
+        $title;
+
+        if ($where === 'rekapan_&_pemusnahan') {
+            $data = $arsip->withTrashed();
+            $title = "Rekapan dan Pemusnahan : {$data->count()}";
+        }
+
+        if ($where === 'arsip_pemusnahan') {
+            $data = $arsip->onlyTrashed();
+            $title = "Arsip Pemusnahan : {$data->count()}";
+        }
+
+        if ($where === 'arsip_date_now') {
+            $bulanSekarang = Carbon::now()->month;
+            $tahunSekarang = Carbon::now()->year;
+
+            $data = $arsip->whereMonth('created_at', $bulanSekarang)
+                          ->whereYear('created_at', $tahunSekarang)
+                          ->get();
+
+            $title = "Arsip Masuk Untuk Bulan {$bulanSekarang} {$tahunSekarang} : {$data->count()}";
+        }
+
+        // todo arsip not delete
+        if ($where === 'arsip') {
+            $data = $arsip;
+            $title = "Total Arsip : {$data->count()}";
+        }
+
+        return view('arsip.arsipWhere', [
+            'arsip' => $arsip->get(),
+            'title' => $title,
+            'where' => $where
         ]);
     }
 

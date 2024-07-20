@@ -23,6 +23,7 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
         Route::get('chart-bar-year', 'getDataChartBar1')->name('chart.bar1.get');
         // * query data
         Route::get('arsip/query', 'getDataWhere')->name('arsip.get.tahun');
+        Route::get('arsip/data/{where}', 'arsipWhere')->name('arsip.get.where');
     });
 
     // * disposisi

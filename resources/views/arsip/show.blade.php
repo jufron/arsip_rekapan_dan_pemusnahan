@@ -57,31 +57,6 @@
                     <li class="list-group-item">
                         <div class="row">
                             <div class="col-md-4 font-weight-bold">
-                                File
-                            </div>
-                            <div class="col-md-8">
-                                @if ($arsip->file)
-                                <a href="#" class="btn btn-success btn-sm btn-icon-split my-1">
-                                    <span class="icon">
-                                        <i class="fa-solid fa-download"></i>
-                                    </span>
-                                    <span class="text">Download</span>
-                                </a>
-                                @else
-                                Tidak Ada File
-                                @endif
-                                {{-- <a href="#" class="btn btn-info btn-sm btn-icon-split my-1">
-                                    <span class="icon">
-                                        <i class="fa-solid fa-file-lines"></i>
-                                    </span>
-                                    <span class="text">Preview</span>
-                                </a> --}}
-                            </div>
-                        </div>
-                    </li>
-                    <li class="list-group-item">
-                        <div class="row">
-                            <div class="col-md-4 font-weight-bold">
                                 Tahun
                             </div>
                             <div class="col-md-8">

@@ -12,6 +12,22 @@
             @if (request()->query('disposisi'))
                 Disposisi : {{ $where }}
             @endif
+
+            @if ($where === 'rekapan_&_pemusnahan')
+                {{ $title }}
+            @endif
+
+            @if ($where === 'arsip_pemusnahan')
+                {{ $title }}
+            @endif
+
+            @if ($where === 'arsip_date_now')
+                {{ $title }}
+            @endif
+
+            @if ($where === 'arsip')
+                {{ $title }}
+            @endif
         </h1>
 
         <!-- DataTales Example -->
@@ -24,6 +40,18 @@
                     @endif
                     @if (request()->query('disposisi'))
                         Disposisi : {{ $where }}
+                    @endif
+                    @if ($where === 'rekapan_&_pemusnahan')
+                        {{ $title }}
+                    @endif
+                    @if ($where === 'arsip_pemusnahan')
+                        {{ $title }}
+                    @endif
+                    @if ($where === 'arsip_date_now')
+                        {{ $title }}
+                    @endif
+                    @if ($where === 'arsip')
+                        {{ $title }}
                     @endif
                 </h6>
             </div>
